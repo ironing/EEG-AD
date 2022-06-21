@@ -34,19 +34,19 @@ warnings.filterwarnings("ignore")
 
 
 
-def random_scale(imgs, num_classes, length, cut_len, paste_len):
+def random_scale(imgs, num_classes, length):
     labels = []
     rets = torch.zeros((imgs.size(0), imgs.size(1), imgs.size(2), length))
     for i in range(imgs.size(0)):
         scale = random.randint(0, num_classes - 1)
         labels.append(scale)
-        rets[i] = cutpaste_and_center_crop_img(imgs[i], scale, length, cut_len, paste_len)
+        rets[i] = cutpaste_and_center_crop_img(imgs[i], scale, length)
     return rets, torch.LongTensor(labels)
 
 
 
 
-def cutpaste_and_center_crop_img(img_tensor, scale, length, cut_len=100, paste_len=50):
+def cutpaste_and_center_crop_img(img_tensor, scale, length):
     output = img_tensor.clone()
 
     if scale == 0:
@@ -90,10 +90,10 @@ def cutpaste_and_center_crop_img(img_tensor, scale, length, cut_len=100, paste_l
 
 
 
-def detm_scale_and_crop(imgs, scale, length, cut_len, paste_len):
+def detm_scale_and_crop(imgs, scale, length):
     rets = torch.zeros((imgs.size(0), imgs.size(1), imgs.size(2), length))
     for i in range(imgs.size(0)):
-        rets[i] = cutpaste_and_center_crop_img(imgs[i], scale, length, cut_len, paste_len)
+        rets[i] = cutpaste_and_center_crop_img(imgs[i], scale, length)
     return rets
 
 
@@ -199,7 +199,7 @@ def load_data(batch_size=16):
 
 
 def train(data_loader, epochs, NUM_CLASSES, length, inplane, learning_rate,
-          optim_name, model_dir, cut_len, paste_len, density=GaussianDensityTorch()):
+          optim_name, model_dir, density=GaussianDensityTorch()):
 
     model = TaskOriNet(num_classes=NUM_CLASSES).to(device)
 
@@ -221,7 +221,7 @@ def train(data_loader, epochs, NUM_CLASSES, length, inplane, learning_rate,
         correct_num = 0
         model.train()
         for (x, _) in data_loader['train']:
-            x_, label = random_scale(x, num_classes=NUM_CLASSES, length=length, cut_len=cut_len, paste_len=paste_len)
+            x_, label = random_scale(x, num_classes=NUM_CLASSES, length=length)
             x_, label = x_.to(device), label.to(device)
             embed, out = model(x_)
             output = F.softmax(out, dim=-1)
@@ -452,10 +452,6 @@ if __name__ == '__main__':
                         help='inplane')
     parser.add_argument('--learning_rate', default=1e-4, type=float,
                         help='learning_rate')
-    parser.add_argument('--cut_len', default=300, type=int,
-                        help='cut_len')
-    parser.add_argument('--paste_len', default=500, type=int,
-                        help='paste_len')
     parser.add_argument('--optim', default="adam",
                         help='optimizing algorithm values:[sgd, adam] (dafault: "adam")')
     parser.add_argument('--save_plots', default="True", type=bool,
@@ -478,7 +474,7 @@ if __name__ == '__main__':
             data_loader = load_data(options.batch_size)
             print("training.")
             train(data_loader, options.epochs, options.num_classes, options.length, options.inplane,
-                  options.learning_rate, options.optim, model_dir, options.cut_len, options.paste_len)
+                  options.learning_rate, options.optim, model_dir)
 
 
 
