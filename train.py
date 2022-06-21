@@ -56,7 +56,7 @@ def cutpaste_and_center_crop_img(img_tensor, scale, length, cut_len=100, paste_l
     if scale == 1:
         paste_len = random.randint(4, length)
         to_location_x = int(random.uniform(0, length - paste_len))
-        mul_factor = random.uniform(1.2, 4.0)
+        mul_factor = random.uniform(2.0, 4.0)
         output[:, :, to_location_x:to_location_x + paste_len] *= mul_factor
         return output
 
@@ -77,7 +77,6 @@ def cutpaste_and_center_crop_img(img_tensor, scale, length, cut_len=100, paste_l
             output = torch.cat([output, output_], 2)
 
         num = int(random.uniform(0, output.shape[2] - length - 1))
-
         output = output[:, :, num:num + length]
 
         return output
