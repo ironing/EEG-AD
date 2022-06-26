@@ -83,21 +83,7 @@ for Dir in Dirs:
             new_raw.save(save_path)
             total += 1
             i += 2
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+                
 # pick normal EEG          
 Dirs = ['chb01', 'chb06', 'chb09', 'chb11',
         'chb20', 'chb21', 'chb23',
@@ -142,11 +128,6 @@ for Dir in Dirs:
         new_raw.save(save_path)
         total += 1
 
-
-
-
-
-
 selection = ['FP1-F7', 'F7-T7', 'T7-P7', 'P7-O1', 'FP1-F3', 'F3-C3',
              'C3-P3', 'P3-O1', 'FP2-F4', 'F4-C4', 'C4-P4', 'P4-O2',
              'FP2-F8', 'F8-T8', 'T8-P8', 'T8-P8-0', 'P8-O2', 'FZ-CZ', 'CZ-PZ']
@@ -168,8 +149,6 @@ Dirs = ['chb01', 'chb06', 'chb09', 'chb11',
         'chb14', 'chb15', 'chb16', 'chb17', 'chb18', 'chb19',
         'chb22'
         ]
-
-
 
 # generate 3s normal EEG
 save_dir_normal = './data/dataset_chb/MAT/normal/3s769'
@@ -204,12 +183,7 @@ for Dir in Dirs:
                 dict['data'] = data_
                 io.savemat(savepath, dict)
                 total += 1
-
-
-                
-                
-                
-                
+           
 # generate 3s abnormal EEG
 save_dir_abnormal = './data/dataset_chb/MAT/abnormal/3s769'
 if not os.path.exists(save_dir_abnormal):
@@ -253,13 +227,7 @@ for Dir in Dirs:
             dict['data'] = data_
             io.savemat(savepath, dict)
             total += 1
-
-
-
-            
-            
-            
-            
+          
 # EEG path ——> txt
 root_dir = './data/dataset_chb/MAT/normal/3s769/'
 normal_paths = []
@@ -279,7 +247,6 @@ random.shuffle(abnormal_paths)
 
 # print(len(normal_paths), len(abnormal_paths))
 
-
 save_dir = './data/all_TXT_3s'
 if not os.path.exists(save_dir):
     os.makedirs(save_dir)
@@ -291,12 +258,3 @@ with open('{}/train.txt'.format(save_dir), 'w+') as f:
 with open('{}/test.txt'.format(save_dir), 'w+') as f:
     for file in abnormal_paths:
         f.write(file + "\r\n")
-
-
-
-
-
-
-
-
-
